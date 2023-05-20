@@ -12,6 +12,7 @@ public enum ErrorCode {
     USER_ACCOUNT_NOT_MATCH("계좌의 소유주와 사용자가 다릅니다."),
     USER_NOT_FOUND("사용자가 없습니다."),
     MAX_ACCOUNT_PER_USER_10("사용자 별 최대 계좌 갯수는 10개 입니다."),
-    BALANCE_NOT_EMPTY("계좌잔액이 존재합니다.");
+    BALANCE_NOT_EMPTY("계좌잔액이 존재합니다."),
+    AMOUNT_EXCEED_BALANCE("거래금액이 잔액보다 큽니다.");
     private String description;
 }
