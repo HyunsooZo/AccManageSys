@@ -1,5 +1,6 @@
 package com.example.account.dto;
 
+import com.example.account.aop.AccountLockIdInterFace;
 import com.example.account.type.TransactionResultType;
 import lombok.*;
 
@@ -13,11 +14,12 @@ import java.time.LocalDateTime;
  *     "amount":1000
  * }
  */
-public class UseBalance {
+public class UseBalance  {
+
     @Getter
     @Setter
     @AllArgsConstructor
-    public static class Request{
+    public static class Request implements AccountLockIdInterFace{
         @NotNull
         @Min(1)
         private Long userId;

@@ -8,6 +8,7 @@ import lombok.Getter;
 public enum ErrorCode {
 
     INTERNAL_SERVER_ERROR("내부 서버 오류가 발생했습니다."),
+    ACCOUNT_TRANSACTION_LOCK("해당 계좌는 사용 중입니다."),
     ACCOUNT_NOT_FOUND("계좌가 존재하지 않습니다."),
     TRANSACTION_NOT_FOUND("해당 거래가 존재하지 않습니다."),
     ACCOUNT_ALREADY_UNREGISTERED("이미 해지된 계좌입니다."),
