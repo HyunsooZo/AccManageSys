@@ -358,6 +358,7 @@ class TransactionServiceTest {
         //then
         assertEquals(ErrorCode.TRANSACTION_ACCOUNT_UN_MATCH,exception.getErrorCode());
     }
+
  @Test
     @DisplayName("거래금액과 최소금액이 다름 - 잔액 사용취소 실패")
     void cancelTransaction_Cancel_Must_Fully() {
