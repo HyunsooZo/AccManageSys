@@ -9,9 +9,9 @@ import java.time.LocalDateTime;
 
 /**
  * {
- *     "userId":"asdsdgfasdfsdfddfsdf",
- *     "accountNumber":"1000000000",
- *     "amount":1000
+ * "userId":"asdsdgfasdfsdfddfsdf",
+ * "accountNumber":"1000000000",
+ * "amount":1000
  * }
  */
 public class CancelBalance {
@@ -23,7 +23,7 @@ public class CancelBalance {
         private String transactionId;
 
         @NotBlank
-        @Size(min = 10 , max = 10)
+        @Size(min = 10, max = 10)
         private String accountNumber;
 
         @NotNull
@@ -44,7 +44,7 @@ public class CancelBalance {
     @NoArgsConstructor
     @AllArgsConstructor
     @Builder
-    public static class Response{
+    public static class Response {
         private String accountNumber;
         private TransactionResultType transactionResult;
         private String transactionId;

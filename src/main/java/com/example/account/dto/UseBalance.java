@@ -9,23 +9,23 @@ import java.time.LocalDateTime;
 
 /**
  * {
- *     "userId":1,
- *     "accountNumber":"1000000000",
- *     "amount":1000
+ * "userId":1,
+ * "accountNumber":"1000000000",
+ * "amount":1000
  * }
  */
-public class UseBalance  {
+public class UseBalance {
 
     @Getter
     @Setter
     @AllArgsConstructor
-    public static class Request implements AccountLockIdInterFace{
+    public static class Request implements AccountLockIdInterFace {
         @NotNull
         @Min(1)
         private Long userId;
 
         @NotBlank
-        @Size(min = 10 , max = 10)
+        @Size(min = 10, max = 10)
         private String accountNumber;
 
         @NotNull
@@ -46,7 +46,7 @@ public class UseBalance  {
     @NoArgsConstructor
     @AllArgsConstructor
     @Builder
-    public static class Response{
+    public static class Response {
         private String accountNumber;
         private TransactionResultType transactionResult;
         private String transactionId;

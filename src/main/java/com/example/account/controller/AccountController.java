@@ -1,7 +1,6 @@
 package com.example.account.controller;
 
 import com.example.account.domain.Account;
-import com.example.account.dto.AccountDto;
 import com.example.account.dto.AccountInfo;
 import com.example.account.dto.CreateAccount;
 import com.example.account.dto.DeleteAccount;
@@ -22,21 +21,22 @@ public class AccountController {
     @PostMapping("/account")
     public CreateAccount.Response createAccount(
             @RequestBody @Valid CreateAccount.Request request
-            ){
+    ) {
         return CreateAccount.Response.from(
                 accountService.createAccount(
                         request.getUserId()
-                        ,request.getInitialBalance())
+                        , request.getInitialBalance())
         );
     }
- @DeleteMapping ("/account")
+
+    @DeleteMapping("/account")
     public DeleteAccount.Response deleteAccount(
             @RequestBody @Valid DeleteAccount.Request request
-            ){
+    ) {
         return DeleteAccount.Response.from(
                 accountService.deleteAccount(
                         request.getUserId()
-                        ,request.getAccountNumber())
+                        , request.getAccountNumber())
         );
     }
 
@@ -48,16 +48,15 @@ public class AccountController {
         return accountService.getAccountsByUserId(userId)
                 .stream().map(accountDto ->
                         AccountInfo.builder()
-                        .accountNumber(accountDto.getAccountNumber())
-                        .balance(accountDto.getBalance()).build())
+                                .accountNumber(accountDto.getAccountNumber())
+                                .balance(accountDto.getBalance()).build())
                 .collect(Collectors.toList());
     }
 
 
-
     @GetMapping("/account/{id}")
     public Account getAccount(
-            @PathVariable Long id){
+            @PathVariable Long id) {
         return accountService.getAccount(id);
     }
 }

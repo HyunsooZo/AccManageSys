@@ -53,8 +53,9 @@ class TransactionServiceTest {
     void successUseBalance() {
         //given
         AccountUser user = AccountUser.builder()
-                .id(12L)
                 .name("Pobi").build();
+        user.setId(12L);
+
         Account account = Account.builder()
                 .accountUser(user)
                 .accountStatus(IN_USE)
@@ -82,13 +83,13 @@ class TransactionServiceTest {
                 1L, "1000000000", 200L);
         //then
         verify(transactionRepository, times(1)).save(captor.capture());
-        assertEquals(200L,captor.getValue().getAmount());
-        assertEquals(9800L,captor.getValue().getBalanceSnapshot());
+        assertEquals(200L, captor.getValue().getAmount());
+        assertEquals(9800L, captor.getValue().getBalanceSnapshot());
 
         assertEquals(S, transactionDto.getTransactionResultType());
-        assertEquals(USE,transactionDto.getTransactionType());
-        assertEquals(9000L,transactionDto.getBalanceSnapshot());
-        assertEquals(1000L,transactionDto.getAmount());
+        assertEquals(USE, transactionDto.getTransactionType());
+        assertEquals(9000L, transactionDto.getBalanceSnapshot());
+        assertEquals(1000L, transactionDto.getAmount());
     }
 
     @Test
@@ -99,7 +100,7 @@ class TransactionServiceTest {
                 .willReturn(Optional.empty());
         //when
         AccountException exception = assertThrows(AccountException.class,
-                () -> transactionService.useBalance(1L, "1000000000",1000L));
+                () -> transactionService.useBalance(1L, "1000000000", 1000L));
         //then
         assertEquals(ErrorCode.USER_NOT_FOUND, exception.getErrorCode());
     }
@@ -109,18 +110,18 @@ class TransactionServiceTest {
     void deleteAccount_AccountNotFound() {
         //given
         AccountUser user = AccountUser.builder()
-                .id(12L)
                 .name("Pobi").build();
+        user.setId(12L);
         given(accountUserRepository.findById(anyLong()))
                 .willReturn(Optional.of(user));
         given(accountRepository.findByAccountNumber(anyString()))
                 .willReturn(Optional.empty());
         //when
         AccountException exception = assertThrows(AccountException.class,
-                () -> transactionService.useBalance(1L, "1000000000",1000L));
+                () -> transactionService.useBalance(1L, "1000000000", 1000L));
 
         //then
-        assertEquals(ErrorCode.ACCOUNT_NOT_FOUND,exception.getErrorCode());
+        assertEquals(ErrorCode.ACCOUNT_NOT_FOUND, exception.getErrorCode());
     }
 
     @Test
@@ -128,11 +129,12 @@ class TransactionServiceTest {
     void deleteAccountFailed_userUnMatch() {
         //given
         AccountUser Pobi = AccountUser.builder()
-                .id(12L)
                 .name("Pobi").build();
+        Pobi.setId(12L);
+
         AccountUser Harry = AccountUser.builder()
-                .id(13L)
                 .name("Harry").build();
+        Harry.setId(13L);
         given(accountUserRepository.findById(anyLong()))
                 .willReturn(Optional.of(Pobi));
         given(accountRepository.findByAccountNumber(anyString()))
@@ -142,10 +144,10 @@ class TransactionServiceTest {
                         .accountNumber("1000000012").build()));
         //when
         AccountException exception = assertThrows(AccountException.class,
-                () -> transactionService.useBalance(1L, "1000000000",1000L));
+                () -> transactionService.useBalance(1L, "1000000000", 1000L));
 
         //then
-        assertEquals(ErrorCode.USER_ACCOUNT_NOT_MATCH,exception.getErrorCode());
+        assertEquals(ErrorCode.USER_ACCOUNT_NOT_MATCH, exception.getErrorCode());
     }
 
     @Test
@@ -153,8 +155,8 @@ class TransactionServiceTest {
     void deleteAccountFailed_alreadyUnregistered() {
         //given
         AccountUser Pobi = AccountUser.builder()
-                .id(12L)
                 .name("Pobi").build();
+        Pobi.setId(12L);
         given(accountUserRepository.findById(anyLong()))
                 .willReturn(Optional.of(Pobi));
         given(accountRepository.findByAccountNumber(anyString()))
@@ -165,10 +167,10 @@ class TransactionServiceTest {
                         .accountNumber("1000000012").build()));
         //when
         AccountException exception = assertThrows(AccountException.class,
-                () -> transactionService.useBalance(1L, "1000000000",1000L));
+                () -> transactionService.useBalance(1L, "1000000000", 1000L));
 
         //then
-        assertEquals(ErrorCode.ACCOUNT_ALREADY_UNREGISTERED,exception.getErrorCode());
+        assertEquals(ErrorCode.ACCOUNT_ALREADY_UNREGISTERED, exception.getErrorCode());
     }
 
     @Test
@@ -176,8 +178,8 @@ class TransactionServiceTest {
     void exceedAmount_UseBalance() {
         //given
         AccountUser user = AccountUser.builder()
-                .id(12L)
                 .name("Pobi").build();
+        user.setId(12L);
         Account account = Account.builder()
                 .accountUser(user)
                 .accountStatus(IN_USE)
@@ -191,9 +193,9 @@ class TransactionServiceTest {
         //when
         //then
         AccountException exception = assertThrows(AccountException.class,
-                () -> transactionService.useBalance(1L, "1000000000",1000L));
+                () -> transactionService.useBalance(1L, "1000000000", 1000L));
 
-        assertEquals(ErrorCode.AMOUNT_EXCEED_BALANCE,exception.getErrorCode());
+        assertEquals(ErrorCode.AMOUNT_EXCEED_BALANCE, exception.getErrorCode());
         verify(transactionRepository, times(0)).save(any());
 
     }
@@ -203,8 +205,8 @@ class TransactionServiceTest {
     void saveFailedUseTransaction() {
         //given
         AccountUser user = AccountUser.builder()
-                .id(12L)
                 .name("Pobi").build();
+        user.setId(12L);
         Account account = Account.builder()
                 .accountUser(user)
                 .accountStatus(IN_USE)
@@ -224,11 +226,11 @@ class TransactionServiceTest {
                         .build());
         ArgumentCaptor<Transaction> captor = ArgumentCaptor.forClass(Transaction.class);
         //when
-        transactionService.saveFailedUseTransaction("1000000000",200L);
+        transactionService.saveFailedUseTransaction("1000000000", 200L);
         //then
         verify(transactionRepository, times(1)).save(captor.capture());
-        assertEquals(200L,captor.getValue().getAmount());
-        assertEquals(10000L,captor.getValue().getBalanceSnapshot());
+        assertEquals(200L, captor.getValue().getAmount());
+        assertEquals(10000L, captor.getValue().getBalanceSnapshot());
         assertEquals(F, captor.getValue().getTransactionResultType());
     }
 
@@ -236,8 +238,8 @@ class TransactionServiceTest {
     void successCancelBalance() {
         //given
         AccountUser user = AccountUser.builder()
-                .id(12L)
                 .name("Pobi").build();
+        user.setId(12L);
         Account account = Account.builder()
                 .accountUser(user)
                 .accountStatus(IN_USE)
@@ -275,13 +277,13 @@ class TransactionServiceTest {
                 "transactionId", "1000000000", CANCEL_AMOUNT);
         //then
         verify(transactionRepository, times(1)).save(captor.capture());
-        assertEquals(CANCEL_AMOUNT,captor.getValue().getAmount());
-        assertEquals(10000L+CANCEL_AMOUNT,captor.getValue().getBalanceSnapshot());
+        assertEquals(CANCEL_AMOUNT, captor.getValue().getAmount());
+        assertEquals(10000L + CANCEL_AMOUNT, captor.getValue().getBalanceSnapshot());
 
         assertEquals(S, transactionDto.getTransactionResultType());
-        assertEquals(CANCEL,transactionDto.getTransactionType());
-        assertEquals(10000L,transactionDto.getBalanceSnapshot());
-        assertEquals(CANCEL_AMOUNT,transactionDto.getAmount());
+        assertEquals(CANCEL, transactionDto.getTransactionType());
+        assertEquals(10000L, transactionDto.getBalanceSnapshot());
+        assertEquals(CANCEL_AMOUNT, transactionDto.getAmount());
     }
 
     @Test
@@ -296,10 +298,10 @@ class TransactionServiceTest {
                 .willReturn(Optional.empty());
         //when
         AccountException exception = assertThrows(AccountException.class,
-                () -> transactionService.cancelBalance("transactionId", "1000000000",1000L));
+                () -> transactionService.cancelBalance("transactionId", "1000000000", 1000L));
 
         //then
-        assertEquals(ErrorCode.ACCOUNT_NOT_FOUND,exception.getErrorCode());
+        assertEquals(ErrorCode.ACCOUNT_NOT_FOUND, exception.getErrorCode());
     }
 
     @Test
@@ -310,10 +312,10 @@ class TransactionServiceTest {
                 .willReturn(Optional.empty());
         //when
         AccountException exception = assertThrows(AccountException.class,
-                () -> transactionService.cancelBalance("transactionId", "1000000000",1000L));
+                () -> transactionService.cancelBalance("transactionId", "1000000000", 1000L));
 
         //then
-        assertEquals(ErrorCode.TRANSACTION_NOT_FOUND,exception.getErrorCode());
+        assertEquals(ErrorCode.TRANSACTION_NOT_FOUND, exception.getErrorCode());
     }
 
     @Test
@@ -321,20 +323,20 @@ class TransactionServiceTest {
     void cancelTransaction_TransactionAccountUn_match() {
         //given
         AccountUser user = AccountUser.builder()
-                .id(12L)
                 .name("Pobi").build();
+        user.setId(12L);
         Account account = Account.builder()
-                .id(1L)
                 .accountUser(user)
                 .accountStatus(IN_USE)
                 .balance(10000L)
                 .accountNumber("1000000012").build();
+        account.setId(1L);
         Account accountNotUse = Account.builder()
-                .id(2L)
                 .accountUser(user)
                 .accountStatus(IN_USE)
                 .balance(10000L)
                 .accountNumber("1000000013").build();
+        accountNotUse.setId(12L);
         Transaction transaction = Transaction.builder()
                 .account(account)
                 .transactionType(USE)
@@ -356,29 +358,30 @@ class TransactionServiceTest {
                         CANCEL_AMOUNT));
 
         //then
-        assertEquals(ErrorCode.TRANSACTION_ACCOUNT_UN_MATCH,exception.getErrorCode());
+        assertEquals(ErrorCode.TRANSACTION_ACCOUNT_UN_MATCH, exception.getErrorCode());
     }
 
- @Test
+    @Test
     @DisplayName("거래금액과 최소금액이 다름 - 잔액 사용취소 실패")
     void cancelTransaction_Cancel_Must_Fully() {
         //given
         AccountUser user = AccountUser.builder()
-                .id(12L)
+
                 .name("Pobi").build();
+        user.setId(12L);
         Account account = Account.builder()
-                .id(1L)
                 .accountUser(user)
                 .accountStatus(IN_USE)
                 .balance(10000L)
                 .accountNumber("1000000012").build();
+        account.setId(1L);
         Transaction transaction = Transaction.builder()
                 .account(account)
                 .transactionType(USE)
                 .transactionResultType(S)
                 .transactionId("transactionId")
                 .transactedAt(LocalDateTime.now())
-                .amount(CANCEL_AMOUNT+1000L)
+                .amount(CANCEL_AMOUNT + 1000L)
                 .balanceSnapshot(9000L)
                 .build();
 
@@ -393,21 +396,22 @@ class TransactionServiceTest {
                         CANCEL_AMOUNT));
 
         //then
-        assertEquals(ErrorCode.CANCEL_MUST_FULLY,exception.getErrorCode());
+        assertEquals(ErrorCode.CANCEL_MUST_FULLY, exception.getErrorCode());
     }
-@Test
+
+    @Test
     @DisplayName("1년이상된 거래 - 잔액 사용취소 실패")
     void cancelTransaction_TooOldTransaction() {
         //given
         AccountUser user = AccountUser.builder()
-                .id(12L)
                 .name("Pobi").build();
+        user.setId(12L);
         Account account = Account.builder()
-                .id(1L)
                 .accountUser(user)
                 .accountStatus(IN_USE)
                 .balance(10000L)
                 .accountNumber("1000000012").build();
+        account.setId(1L);
         Transaction transaction = Transaction.builder()
                 .account(account)
                 .transactionType(USE)
@@ -429,7 +433,7 @@ class TransactionServiceTest {
                         CANCEL_AMOUNT));
 
         //then
-        assertEquals(ErrorCode.TOO_OLD_ORDER_CANCEL,exception.getErrorCode());
+        assertEquals(ErrorCode.TOO_OLD_ORDER_CANCEL, exception.getErrorCode());
     }
 
 
@@ -437,14 +441,14 @@ class TransactionServiceTest {
     void successQueryTransaction() {
         //given
         AccountUser user = AccountUser.builder()
-                .id(12L)
                 .name("Pobi").build();
+        user.setId(12L);
         Account account = Account.builder()
-                .id(1L)
                 .accountUser(user)
                 .accountStatus(IN_USE)
                 .balance(10000L)
                 .accountNumber("1000000012").build();
+        account.setId(1L);
         Transaction transaction = Transaction.builder()
                 .account(account)
                 .transactionType(USE)
@@ -460,10 +464,10 @@ class TransactionServiceTest {
         //when
         TransactionDto transactionDto = transactionService.queryTransaction("trxId");
         //then
-        assertEquals(USE,transactionDto.getTransactionType());
-        assertEquals(S,transactionDto.getTransactionResultType());
-        assertEquals(CANCEL_AMOUNT,transactionDto.getAmount());
-        assertEquals("transactionId",transactionDto.getTransactionId());
+        assertEquals(USE, transactionDto.getTransactionType());
+        assertEquals(S, transactionDto.getTransactionResultType());
+        assertEquals(CANCEL_AMOUNT, transactionDto.getAmount());
+        assertEquals("transactionId", transactionDto.getTransactionId());
 
     }
 
@@ -478,6 +482,6 @@ class TransactionServiceTest {
         AccountException exception = assertThrows(AccountException.class,
                 () -> transactionService.queryTransaction("transactionId"));
         //then
-        assertEquals(ErrorCode.TRANSACTION_NOT_FOUND,exception.getErrorCode());
+        assertEquals(ErrorCode.TRANSACTION_NOT_FOUND, exception.getErrorCode());
     }
 }

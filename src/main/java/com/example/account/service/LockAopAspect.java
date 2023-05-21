@@ -6,7 +6,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
-import org.springframework.beans.factory.annotation.Required;
 import org.springframework.stereotype.Component;
 
 @Aspect
@@ -24,7 +23,7 @@ public class LockAopAspect {
     ) throws Throwable {
         //lock 취득 시도
         lockService.Lock(request.getAccountNumber());
-        try{
+        try {
             //동작 전
             return pjp.proceed();
             //동작 후
